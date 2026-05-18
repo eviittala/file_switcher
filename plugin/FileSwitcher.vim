@@ -57,12 +57,22 @@ def IsValidFile(file: string): bool
     if ext =~ '\v(c|cpp|h|hpp)\c'
         return true
     endif
+    echomsg "Not valid file: " .. file
     return false
+enddef
+
+def IsCurrentBufferSaved(): bool
+    var isModified: bool = &modified
+    if isModified
+        echomsg "Please save your changes first"
+        return false
+    endif
+    return true
 enddef
 
 def g:CallFileSwitcher(): void
     var current_file: string = expand('%')
-    if IsValidFile(current_file)
+    if IsValidFile(current_file) && IsCurrentBufferSaved()
         files = py3eval("fs.get_files()")
         if 1 < len(files)
             ShowDialog()
@@ -71,8 +81,6 @@ def g:CallFileSwitcher(): void
         elseif 0 == len(files)
             echomsg "Cannot find switchable file for " .. current_file
         endif
-    else
-        echomsg "Not valid file: " .. current_file
     endif
 enddef
 
