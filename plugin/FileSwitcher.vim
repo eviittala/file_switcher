@@ -76,9 +76,9 @@ def g:CallFileSwitcher(): void
         files = py3eval("fs.get_files()")
         if 1 < len(files)
             ShowDialog()
-        elseif 0 < len(files)
+        elseif len(files) == 1
             OpenFile(files[0])
-        elseif 0 == len(files)
+        elseif len(files) == 0
             echomsg "Cannot find switchable file for " .. current_file
         endif
     endif
