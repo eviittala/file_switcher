@@ -70,7 +70,7 @@ def IsCurrentBufferSaved(): bool
     return true
 enddef
 
-def g:CallFileSwitcher(): void
+def g:FileSwitcher(): void
     var current_file: string = expand('%')
     if IsValidFile(current_file) && IsCurrentBufferSaved()
         files = py3eval("fs.get_files()")
@@ -84,4 +84,4 @@ def g:CallFileSwitcher(): void
     endif
 enddef
 
-nnoremap <leader>q :call CallFileSwitcher()<CR>
+nnoremap <leader>s :call FileSwitcher()<CR>
