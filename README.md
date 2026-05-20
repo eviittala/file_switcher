@@ -1,4 +1,4 @@
-# Fileswitcher
+# FileSwitcher
 <details>
 Switch file between source and header in C/C++.
 File can be switched by pressing '&lt;leader&gt;s'.
