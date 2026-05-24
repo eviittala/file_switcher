@@ -32,7 +32,9 @@ def OpenFile(file: string): void
 enddef
 
 def SelectFile(id: number, result: number): void
-    OpenFile(files[result - 1])
+    if 0 < result && result <= len(files)
+        OpenFile(files[result - 1])
+    endif
 enddef
 
 def ShowDialog(): void
