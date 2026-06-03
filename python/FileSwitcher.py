@@ -8,30 +8,38 @@ def print_error(errStr):
     cmd = f"echomsg \"{errStr}\""
     vim.command(cmd)
 
-def find_files_in_tags(file):
+def get_files_from_tags():
     if os.path.exists('tags'):
-        filename = os.path.basename(file)
         files = set([])
         try:
             with open('tags') as file:
                 for line in file:
-                    if line.find(filename) != -1:
-                        txt = line.split()
-                        if os.path.basename(txt[1]) == filename:
-                            files.add(txt[1])
+                    if line.find("!_TAG_") == -1:
+                        txt = line.split('\t')
+                        files.add(txt[1])
         except (IOError, UnicodeDecodeError) as e:
             pass
-        
-        return list(files)
+         
+        return sorted(list(files))
     else:
         print_error("tags -file is not found")
     return list()
+
+def find_files_in_tags(file):
+    filename = os.path.basename(file)
+    files = []
+    for tag_file in get_files_from_tags():
+        if tag_file.find(filename) != -1:
+            if os.path.basename(tag_file) == filename:
+                files.append(tag_file)
+    return files
 
 def open_file(path):
     cmd = 'edit ' + path
     vim.command(cmd)
 
 def get_other_file(file):
+    # TODO Eero: if header file, return source and vice versa
     if file_extension(file) == 'cpp':
         return file[0:-3] + 'hpp'
     elif file_extension(file) == 'hpp': 

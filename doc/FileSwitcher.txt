@@ -15,13 +15,14 @@ CONTENTS                                                     *FileSwitcher-conte
 1. Intro							*FileSwitcher*
 
 FileSwitcher plugin for C/C++ projects.  One can easily switch between source
-and header file by pressing <leader>s. In order to get full file switching
-functionality user should create tags -file.
+and header file by pressing |<leader>s|. In order to get full file switching
+functionality user should create tags -file. File searching and opening plugin
+can be used by pressing |<leader>o|.
 ==============================================================================
 2. About							*FileSwitcherAbout*
 
 Issues can be reported to:
-https://github.com/eviittala/FileSwitcher/issues
+https://github.com/eviittala/file_switcher/issues
 
 Eero Viittala
 eero.viittala@outlook.com

@@ -38,24 +38,35 @@ class TestFileSwitcher(unittest.TestCase):
         fs.print_error(str)
         mock_method.assert_called_with('echomsg "test Eero error"')
 
+    def test_get_files_from_tags(self):
+        self._add_text_to_tags("!_TAG_PROGRAM_NAME\tUniversal Ctags /Derived from Exuberant Ctags/")
+        self._add_text_to_tags("!_TAG_PROGRAM_URL\thttps://ctags.io/\t/official site/")
+        self._add_text_to_tags("!_TAG_PROGRAM_VERSION\t6.0.0\t//")
+        self._add_text_to_tags("AATRBL_MAX_FILE_SIZE_IN_BYTES\t./app/ctrl/rt/ru/aaTrblClientLogHandler/common/AaTrblClientUtils.hpp\t/^inline constexpr uint32_t AATRBL_MAX_FILE_SIZE_IN_BYTES           = 6 * 1000 * 1000;$/;\"\tv\tnamespace:l1sw::aaTrblClientLogHandler\ttyperef:typename:uint32_t")
+        self._add_text_to_tags("AATRBL_MAX_NBR_OF_RETRIES\t./app/ctrl/rt/ru/aaTrblClientLogHandler/common/AaTrblClientUtils.hpp\t/^inline constexpr uint32_t AATRBL_MAX_NBR_OF_RETRIES               = 3;$/;\"\tv\tnamespace:l1sw::aaTrblClientLogHandler\ttyperef:typename:uint32_t")
+        self._add_text_to_tags("AATRBL_MAX_NBR_OF_SPLIT_FILES\t./app/ctrl/rt/ru/aaTrblClientLogHandler/common/AaTrblClientUtils.hpp\t/^inline constexpr uint32_t AATRBL_MAX_NBR_OF_SPLIT_FILES           = 100;$/;\"\tv\tnamespace:l1sw::aaTrblClientLogHandler\ttyperef:typename:uint32_t")
+        files = fs.get_files_from_tags()
+        self.assertEqual(1, len(files))
+        self.assertEqual(['./app/ctrl/rt/ru/aaTrblClientLogHandler/common/AaTrblClientUtils.hpp'], files)
+
     def test_find_files_in_tags(self):
         self.assertEqual(list(), fs.find_files_in_tags('Foo.cpp'))
         self.assertTrue(0 == len(fs.find_files_in_tags('Foo.cpp')))
 
     def test_find_files_in_tags1(self):
-        self._add_text_to_tags("Main software/bar/Foo.cpp class Foo")
+        self._add_text_to_tags("Main\tsoftware/bar/Foo.cpp\tclass Foo")
         self.assertEqual(['software/bar/Foo.cpp'], fs.find_files_in_tags('Foo.cpp'))
 
     def test_find_files_in_tags2(self):
-        self._add_text_to_tags("Main    software/bar/TestFoo.cpp    class Foo")
-        self._add_text_to_tags("Main    software/bar/Foo.cpp    class Foo")
+        self._add_text_to_tags("Main\tsoftware/bar/TestFoo.cpp\tclass Foo")
+        self._add_text_to_tags("Main\tsoftware/bar/Foo.cpp\tclass Foo")
         self.assertEqual(['software/bar/Foo.cpp'], fs.find_files_in_tags('software/foo/Foo.cpp'))
 
     def test_find_files_in_tags3(self):
-        self._add_text_to_tags("Main    software/tmp/Foo.cpp    class Foo")
-        self._add_text_to_tags("Main    software/bar/TestFoo.cpp    class Foo")
-        self._add_text_to_tags("Main    software/bar/Foo.cpp    class Foo")
-        self._add_text_to_tags("Main    software/sys/Foo.cpp    class Foo")
+        self._add_text_to_tags("Main\tsoftware/tmp/Foo.cpp\tclass Foo")
+        self._add_text_to_tags("Main\tsoftware/bar/TestFoo.cpp\tclass Foo")
+        self._add_text_to_tags("Main\tsoftware/bar/Foo.cpp\tclass Foo")
+        self._add_text_to_tags("Main\tsoftware/sys/Foo.cpp\tclass Foo")
         files = fs.find_files_in_tags('software/foo/Foo.cpp')
         for file in ['software/tmp/Foo.cpp', 'software/sys/Foo.cpp', 'software/bar/Foo.cpp']:
             if file not in files:
@@ -95,7 +106,7 @@ class TestFileSwitcher(unittest.TestCase):
     @patch('FileSwitcher.get_current_buffer_name')
     def test_get_files_file_exists_in_tags(self, mock_method):
         mock_method.return_value = 'Foo.hpp'
-        self._add_text_to_tags("Main software/bar/Foo.cpp class Foo")
+        self._add_text_to_tags("Main\tsoftware/bar/Foo.cpp\tclass Foo")
         self.assertEqual(['software/bar/Foo.cpp'], fs.get_files())
 
 unittest.main()
