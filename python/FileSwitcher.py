@@ -11,15 +11,11 @@ def print_error(errStr):
 def get_files_from_tags():
     if os.path.exists('tags'):
         files = set([])
-        try:
-            with open('tags') as file:
-                for line in file:
-                    if line.find("!_TAG_") == -1:
-                        txt = line.split('\t')
-                        files.add(txt[1])
-        except (IOError, UnicodeDecodeError) as e:
-            pass
-         
+        with open('tags', 'r', encoding='utf-8', errors='ignore') as lines_in_file:
+            for line in lines_in_file:
+                if line.find("!_TAG_") == -1:
+                    txt = line.split('\t')
+                    files.add(txt[1])
         return sorted(list(files))
     else:
         print_error("tags -file is not found")
