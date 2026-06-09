@@ -38,18 +38,7 @@ def SelectFile(id: number, result: number): void
 enddef
 
 def ShowDialog(): void
-    var pos = getpos('.')
-    popup_create(files, {
-        \ line: pos[1] + 1,
-        \ col: pos[2],
-        \ zindex: 200,
-        \ drag: 1,
-        \ wrap: 0,
-        \ border: [],
-        \ cursorline: 1,
-        \ padding: [0, 1, 0, 1],
-        \ filter: 'popup_filter_menu',
-        \ mapping: 0,
+    popup_menu(files, {
         \ callback: 'SelectFile',
         \ })
 enddef
