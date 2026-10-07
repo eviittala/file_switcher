@@ -26,12 +26,12 @@ var files: list<string>
 var filePat: string
 
 def Callback(winId: number, result: number): void
-    echomsg "winId: " .. winId .. " result: " .. result
+    # echomsg "winId: " .. winId .. " result: " .. result
     if 0 < result
         var val: number = result == 1 ? result :  result - 1
         var content: list<string> = GetMenuContent()
         if val < len(content)
-            echomsg "You choose: " .. content[val]
+            # echomsg "You choose: " .. content[val]
             execute "edit " .. content[val]
         endif
     endif
@@ -63,8 +63,7 @@ def GetMenuContent(): list<string>
 enddef
 
 def MyMenuFilter(winId: number, key: string): bool
-    echomsg "winId: " .. winId .. " key: " .. key
-
+    # echomsg "winId: " .. winId .. " key: " .. key
     if key == "\<DOWN>"
        popup_setoptions(winId, {cursorline: 1}) 
     endif
@@ -116,7 +115,15 @@ def ShowPopup(): void
 enddef    
 
 def GetFiles(): void
-    files = py3eval("fs.get_files_from_tags()")
+    # Old function:
+    # files = py3eval("fs.get_files_from_tags()")
+    if len(files) == 0
+        for line in readfile("tags")
+            var txt = split(line, '\t')
+            files->add(txt[1])
+        endfor
+        uniq(sort(files))
+    endif
 enddef
 
 def IsCurrentBufferSaved(): bool
