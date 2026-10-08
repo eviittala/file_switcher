@@ -31,7 +31,7 @@ def Callback(winId: number, result: number): void
         var val: number = result == 1 ? result :  result - 1
         var content: list<string> = GetMenuContent()
         if val < len(content)
-            # echomsg "You choose: " .. content[val]
+            #echomsg "You choose: " .. content[val]
             execute "edit " .. content[val]
         endif
     endif
@@ -135,8 +135,16 @@ def IsCurrentBufferSaved(): bool
     return true
 enddef
 
+def Exists(file: string): bool
+    if !filereadable(file)
+        echomsg "Cannot find file: " .. file
+        return false
+    endif
+    return true
+enddef
+
 def g:FileOpener(): void
-    if IsCurrentBufferSaved()
+    if IsCurrentBufferSaved() && Exists("tags")
         filePat = ""
         GetFiles()
         ShowPopup()
