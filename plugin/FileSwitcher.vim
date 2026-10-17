@@ -12,6 +12,7 @@ endif
 var fileSwitcherOpenerLoaded = 1
 
 var files: list<string>
+var tagsTime: number = 0
 var filePat: string
 var other_files: list<string>
 
@@ -120,13 +121,18 @@ def ShowDialog(): void
 enddef
 
 def GetFilesFromTags(): void
-    # Old function:
-    # files = py3eval("fs.get_files_from_tags()")
-    # TODO Eero: Add sha256(file) and if content has been changed, reload the file
-    if len(files) == 0
+    var ftime: number = getftime("tags")
+    if ftime != tagsTime
+        tagsTime = ftime
+        files = []
+    endif
+    if len(files) == 0 
+        echomsg "Reading tags..."
         for line in readfile("tags")
             var txt = split(line, '\t')
-            files->add(txt[1])
+            if txt[0] !~ '!_TAG'
+                files->add(txt[1])
+            endif
         endfor
         uniq(sort(files))
     endif
