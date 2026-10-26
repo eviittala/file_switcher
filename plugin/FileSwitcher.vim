@@ -127,7 +127,7 @@ def GetFilesFromTags(): void
         files = []
     endif
     if len(files) == 0 
-        echomsg "Reading tags..."
+        echomsg "Reading tags - Please wait..."
         for line in readfile("tags")
             var txt = split(line, '\t')
             if txt[0] !~ '!_TAG'
@@ -199,8 +199,8 @@ def FindOtherFiles(): list<string>
 enddef
 
 def OpenFile(file: string): void
-    var txt: string = "Changing to " .. file
-    echomsg txt
+    # var txt: string = "Changing to " .. file
+    # echomsg txt
     execute "edit " .. file
     other_files = []
 enddef
